@@ -1,7 +1,7 @@
 import React, { useState, useReducer } from 'react';
 import './App.css';
 import { initialState, reducer } from './reducers/reducer-todo';
-import ToDo from './components/ToDoList.js'
+
 
 function App() {
 
@@ -21,18 +21,22 @@ function App() {
         <input name='todo' id='todo' onChange={handleChanges} value={input}/>
       </form>
       <div>
-        <ToDo task={state.todo}/>
+        {state.todo.map( task => (
+          <div key={task.id} onClick={ ()=> dispatch({type:'MARKING_AS_COMPLETE', payload: task.id })} className={`${task.completed === true ? 'completed' : ''}`}>
+            <div >{task.task}</div>
+          </div>
+        ))}
       </div>
       <button onClick={ () => dispatch({ type: 'ADD_TODO' , payload: {
         task: input,
         id: new Date(),
-        Completed: false
-      }
-      }, setInput(''))}>Add ToDo</button>
-      <button>Marked as Complete</button>
-      <button>Clear Completed</button>
+        Completed: false 
+      }},
+       setInput(''))}>Add ToDo</button>
+      <button onClick={()=> dispatch({type:'CLEARING_COMPLETED'})}>Clear Completed</button>
     </div>
   );
 }
 
 export default App;
+
